@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import curses
+import json
 import re
 import shlex
 import shutil
@@ -49,7 +50,29 @@ def _strip_ansi(text: str) -> str:
     return _ANSI_ESCAPE.sub("", text)
 
 
-_LIST_YAML_START = re.compile(r"^(?:---|[A-Za-z_][\w]*:)")
+_LIST_YAML_START = re.compile(r"^(?:---|[A-Z][A-Z0-9_]+:)")
+
+
+def _unwrap_runner_stdout(text: str) -> str:
+    """Return command stdout from ansible-runner ``json_mode`` output.
+
+    Args:
+        text: Raw output from :func:`ansible_runner.get_ansible_config`
+
+    Returns:
+        The ansible-config stdout payload when wrapped as JSON
+    """
+    stripped = text.strip()
+    if not stripped.startswith("{"):
+        return text
+    try:
+        payload = json.loads(stripped)
+    except json.JSONDecodeError:
+        return text
+    stdout = payload.get("stdout")
+    if isinstance(stdout, str):
+        return stdout
+    return text
 
 
 def _ansible_config_list_yaml(text: str) -> str:
@@ -174,7 +197,7 @@ class Action(ActionBase):
             return None
 
         self._run_runner()
-        if self._config is None:
+        if not self._config:
             self._prepare_to_exit(interaction)
             return None
 
@@ -407,6 +430,9 @@ class Action(ActionBase):
         Returns:
             Nothing
         """
+        list_output = _unwrap_runner_stdout(list_output)
+        dump_output = _unwrap_runner_stdout(dump_output)
+
         try:
             parsed = yaml.load(_ansible_config_list_yaml(list_output), Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")
@@ -502,6 +528,9 @@ class Action(ActionBase):
             parsed: The parsed config dictionary to update in place.
         """
         for key, value in parsed.items():
+            if not isinstance(value, dict):
+                self._logger.debug("skipping unparsable list entry for %s", key)
+                continue
             value["option"] = key
             value["name"] = key.replace("_", " ").capitalize()
             value["default_value"] = value.get("default", "None")

@@ -1,6 +1,7 @@
 """Unit tests for the ``config`` action."""
 
 import curses
+import json
 
 from copy import deepcopy
 
@@ -132,12 +133,30 @@ def test_config_filter_content_keys() -> None:
                 },
             ],
         ),
+        pytest.param(
+            json.dumps({"stdout": "ACTION_WARNINGS:\n  default: true\n"}),
+            json.dumps({"stdout": "ACTION_WARNINGS(default) = True\n"}),
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
     ),
     ids=[
         "output_with_galaxy_server",
         "empty_output_with_some_var_dump",
         "colored_dump_with_banner",
         "banner_and_blank_line_before_settings",
+        "json_mode_runner_stdout",
     ],
 )
 def test_parse_and_merge(
