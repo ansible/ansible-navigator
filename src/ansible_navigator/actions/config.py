@@ -74,9 +74,6 @@ def _unwrap_runner_stdout(text: str) -> str:
     stdout = payload.get("stdout")
     if not isinstance(stdout, str):
         return text
-    # ansible-runner json_mode payloads include rc and/or stderr alongside stdout
-    if "rc" not in payload and "stderr" not in payload:
-        return text
     return stdout
 
 
@@ -544,5 +541,5 @@ class Action(ActionBase):
                 value["default"] = False
             value["current_config_file"] = str(self._args.internals.ansible_configuration.path)
 
-        self._config = list(parsed.values())
+        self._config = [value for value in parsed.values() if isinstance(value, dict)]
         self._logger.debug("parsed and merged list and dump successfully")

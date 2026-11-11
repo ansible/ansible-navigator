@@ -89,15 +89,19 @@ def test_finalize_parsed_config_drops_non_dict_entries() -> None:
     run_action._finalize_parsed_config(parsed)
 
     assert "WARNING" not in parsed
-    assert len(run_action._config) == 1
-    assert run_action._config[0]["option"] == "ACTION_WARNINGS"
+    config = run_action._config
+    assert config is not None
+    assert len(config) == 1
+    assert config[0]["option"] == "ACTION_WARNINGS"
 
 
-def test_unwrap_runner_stdout_requires_runner_envelope() -> None:
-    """Only unwrap JSON that looks like ansible-runner json_mode output."""
+def test_unwrap_runner_stdout_json_mode() -> None:
+    """Unwrap ansible-runner json_mode blobs that expose stdout."""
     wrapped = json.dumps({"stdout": "ACTION_WARNINGS:\n", "stderr": "", "rc": 0})
     assert _unwrap_runner_stdout(wrapped) == "ACTION_WARNINGS:\n"
-    assert _unwrap_runner_stdout(json.dumps({"stdout": "x"})) == json.dumps({"stdout": "x"})
+    assert _unwrap_runner_stdout(json.dumps({"stdout": "ACTION_WARNINGS:\n"})) == (
+        "ACTION_WARNINGS:\n"
+    )
     assert _unwrap_runner_stdout("ACTION_WARNINGS:\n") == "ACTION_WARNINGS:\n"
 
 
