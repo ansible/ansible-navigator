@@ -69,10 +69,15 @@ def _unwrap_runner_stdout(text: str) -> str:
         payload = json.loads(stripped)
     except json.JSONDecodeError:
         return text
+    if not isinstance(payload, dict):
+        return text
     stdout = payload.get("stdout")
-    if isinstance(stdout, str):
-        return stdout
-    return text
+    if not isinstance(stdout, str):
+        return text
+    # ansible-runner json_mode payloads include rc and/or stderr alongside stdout
+    if "rc" not in payload and "stderr" not in payload:
+        return text
+    return stdout
 
 
 def _ansible_config_list_yaml(text: str) -> str:
@@ -446,22 +451,15 @@ class Action(ActionBase):
         parsed.pop("GALAXY_SERVERS", None)
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-        saw_setting = False
         for line in _strip_ansi(dump_output).splitlines():
             if not line:
-                if saw_setting:
-                    # ansible-config ends the base settings with a blank line
-                    break
                 continue
             if not regex.match(line):
                 # Warnings and other banners are not settings.
                 continue
-            if self._parse_dump_line(regex, line, parsed):
-                saw_setting = True
+            self._parse_dump_line(regex, line, parsed)
 
         self._finalize_parsed_config(parsed)
-        self._config = list(parsed.values())
-        self._logger.debug("parsed and merged list and dump successfully")
         return
 
     def _parse_dump_line(

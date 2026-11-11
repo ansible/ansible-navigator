@@ -8,6 +8,7 @@ from copy import deepcopy
 import pytest
 
 from ansible_navigator.actions.config import Action as action
+from ansible_navigator.actions.config import _unwrap_runner_stdout
 from ansible_navigator.actions.config import color_menu
 from ansible_navigator.actions.config import content_heading
 from ansible_navigator.actions.config import filter_content_keys
@@ -77,6 +78,14 @@ def test_config_content_heading_false() -> None:
     assert heading[0][0].column == 0
 
 
+def test_unwrap_runner_stdout_requires_runner_envelope() -> None:
+    """Only unwrap JSON that looks like ansible-runner json_mode output."""
+    wrapped = json.dumps({"stdout": "ACTION_WARNINGS:\n", "stderr": "", "rc": 0})
+    assert _unwrap_runner_stdout(wrapped) == "ACTION_WARNINGS:\n"
+    assert _unwrap_runner_stdout(json.dumps({"stdout": "x"})) == json.dumps({"stdout": "x"})
+    assert _unwrap_runner_stdout("ACTION_WARNINGS:\n") == "ACTION_WARNINGS:\n"
+
+
 def test_config_filter_content_keys() -> None:
     """Test filtering keys."""
     obj = {"__key": "value", "key": "value"}
@@ -134,8 +143,20 @@ def test_config_filter_content_keys() -> None:
             ],
         ),
         pytest.param(
-            json.dumps({"stdout": "ACTION_WARNINGS:\n  default: true\n"}),
-            json.dumps({"stdout": "ACTION_WARNINGS(default) = True\n"}),
+            json.dumps(
+                {
+                    "stdout": "ACTION_WARNINGS:\n  default: true\n",
+                    "stderr": "",
+                    "rc": 0,
+                },
+            ),
+            json.dumps(
+                {
+                    "stdout": "ACTION_WARNINGS(default) = True\n",
+                    "stderr": "",
+                    "rc": 0,
+                },
+            ),
             [
                 {
                     "__current": "True",
