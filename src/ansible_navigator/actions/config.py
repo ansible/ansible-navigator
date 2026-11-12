@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import curses
+import json
 import re
 import shlex
 import shutil
@@ -32,6 +33,66 @@ from . import run_action
 if TYPE_CHECKING:
     from ansible_navigator.app_public import AppPublic
     from ansible_navigator.configuration_subsystem.definitions import ApplicationConfiguration
+
+
+_ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+
+
+def _strip_ansi(text: str) -> str:
+    """Remove ANSI color sequences from ansible-config output.
+
+    Args:
+        text: Command output that may include terminal color codes
+
+    Returns:
+        The same text without ANSI escape sequences
+    """
+    return _ANSI_ESCAPE.sub("", text)
+
+
+_LIST_YAML_START = re.compile(r"^(?:---|[A-Z][A-Z0-9_]+:)")
+
+
+def _unwrap_runner_stdout(text: str) -> str:
+    """Return command stdout from ansible-runner ``json_mode`` output.
+
+    Args:
+        text: Raw output from :func:`ansible_runner.get_ansible_config`
+
+    Returns:
+        The ansible-config stdout payload when wrapped as JSON
+    """
+    stripped = text.strip()
+    if not stripped.startswith("{"):
+        return text
+    try:
+        payload = json.loads(stripped)
+    except json.JSONDecodeError:
+        return text
+    if not isinstance(payload, dict):
+        return text
+    stdout = payload.get("stdout")
+    if not isinstance(stdout, str):
+        return text
+    return stdout
+
+
+def _ansible_config_list_yaml(text: str) -> str:
+    """Return YAML payload from ansible-config list output.
+
+    EE runs may prefix stdout with banners before the mapping document.
+
+    Args:
+        text: Raw stdout from ``ansible-config list``
+
+    Returns:
+        A substring suitable for :func:`yaml.load`
+    """
+    lines = _strip_ansi(text).splitlines()
+    for idx, line in enumerate(lines):
+        if _LIST_YAML_START.match(line.strip()):
+            return "\n".join(lines[idx:])
+    return _strip_ansi(text)
 
 
 def color_menu(colno: int, colname: str, entry: dict[str, Any]) -> tuple[int, int]:
@@ -138,7 +199,7 @@ class Action(ActionBase):
             return None
 
         self._run_runner()
-        if self._config is None:
+        if not self._config:
             self._prepare_to_exit(interaction)
             return None
 
@@ -371,25 +432,31 @@ class Action(ActionBase):
         Returns:
             Nothing
         """
+        list_output = _unwrap_runner_stdout(list_output)
+        dump_output = _unwrap_runner_stdout(dump_output)
+
         try:
-            parsed = yaml.load(list_output, Loader=Loader)
+            parsed = yaml.load(_ansible_config_list_yaml(list_output), Loader=Loader)
             self._logger.debug("yaml loading list output succeeded")
         except yaml.YAMLError as exc:
             self._logger.debug("error yaml loading list output: '%s'", str(exc))
             return
 
+        if not isinstance(parsed, dict):
+            return
+
         parsed.pop("GALAXY_SERVERS", None)
 
         regex = re.compile(r"^(?P<variable>\S+)\((?P<source>.*)\)\s=\s(?P<current>.*)$")
-        for line in dump_output.splitlines():
+        for line in _strip_ansi(dump_output).splitlines():
             if not line:
-                break
-            if not self._parse_dump_line(regex, line, parsed):
-                return
+                continue
+            if not regex.match(line):
+                # Warnings and other banners are not settings.
+                continue
+            self._parse_dump_line(regex, line, parsed)
 
         self._finalize_parsed_config(parsed)
-        self._config = list(parsed.values())
-        self._logger.debug("parsed and merged list and dump successfully")
         return
 
     def _parse_dump_line(
@@ -455,15 +522,24 @@ class Action(ActionBase):
         Args:
             parsed: The parsed config dictionary to update in place.
         """
-        for key, value in parsed.items():
+        for key, value in list(parsed.items()):
+            if not isinstance(value, dict):
+                self._logger.debug("skipping unparsable list entry for %s", key)
+                del parsed[key]
+                continue
             value["option"] = key
             value["name"] = key.replace("_", " ").capitalize()
             value["default_value"] = value.get("default", "None")
+            if "source" not in value:
+                value["source"] = "default"
+                value["via"] = "default"
+            value.setdefault("current_value", value.get("default"))
+            value.setdefault("__current", str(value.get("current_value")))
             if value["source"] == "default":
                 value["default"] = True
             else:
                 value["default"] = False
             value["current_config_file"] = str(self._args.internals.ansible_configuration.path)
 
-        self._config = list(parsed.values())
+        self._config = [value for value in parsed.values() if isinstance(value, dict)]
         self._logger.debug("parsed and merged list and dump successfully")
