@@ -1,12 +1,14 @@
 """Unit tests for the ``config`` action."""
 
 import curses
+import json
 
 from copy import deepcopy
 
 import pytest
 
 from ansible_navigator.actions.config import Action as action
+from ansible_navigator.actions.config import _unwrap_runner_stdout
 from ansible_navigator.actions.config import color_menu
 from ansible_navigator.actions.config import content_heading
 from ansible_navigator.actions.config import filter_content_keys
@@ -76,6 +78,33 @@ def test_config_content_heading_false() -> None:
     assert heading[0][0].column == 0
 
 
+def test_finalize_parsed_config_drops_non_dict_entries() -> None:
+    """Non-mapping list YAML entries must not appear in the config menu."""
+    args = deepcopy(NavigatorConfiguration)
+    run_action = action(args=args)
+    parsed = {
+        "ACTION_WARNINGS": {"default": True},
+        "WARNING": "notice",
+    }
+    run_action._finalize_parsed_config(parsed)
+
+    assert "WARNING" not in parsed
+    config = run_action._config
+    assert config is not None
+    assert len(config) == 1
+    assert config[0]["option"] == "ACTION_WARNINGS"
+
+
+def test_unwrap_runner_stdout_json_mode() -> None:
+    """Unwrap ansible-runner json_mode blobs that expose stdout."""
+    wrapped = json.dumps({"stdout": "ACTION_WARNINGS:\n", "stderr": "", "rc": 0})
+    assert _unwrap_runner_stdout(wrapped) == "ACTION_WARNINGS:\n"
+    assert _unwrap_runner_stdout(json.dumps({"stdout": "ACTION_WARNINGS:\n"})) == (
+        "ACTION_WARNINGS:\n"
+    )
+    assert _unwrap_runner_stdout("ACTION_WARNINGS:\n") == "ACTION_WARNINGS:\n"
+
+
 def test_config_filter_content_keys() -> None:
     """Test filtering keys."""
     obj = {"__key": "value", "key": "value"}
@@ -96,10 +125,78 @@ def test_config_filter_content_keys() -> None:
             "\n\nSOME_VAR(default) = some_value",
             [],
         ),
+        pytest.param(
+            "ACTION_WARNINGS:\n  default: true\n",
+            "[WARNING]: extra banner\n"
+            "\x1b[32mACTION_WARNINGS(default) = True\x1b[0m\n"
+            "UNKNOWN_SETTING(default) = 1\n",
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
+        pytest.param(
+            "[WARNING]: list banner\nACTION_WARNINGS:\n  default: true\n",
+            "[WARNING]: dump banner\n\nACTION_WARNINGS(default) = True\n",
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
+        pytest.param(
+            json.dumps(
+                {
+                    "stdout": "ACTION_WARNINGS:\n  default: true\n",
+                    "stderr": "",
+                    "rc": 0,
+                },
+            ),
+            json.dumps(
+                {
+                    "stdout": "ACTION_WARNINGS(default) = True\n",
+                    "stderr": "",
+                    "rc": 0,
+                },
+            ),
+            [
+                {
+                    "__current": "True",
+                    "current_config_file": "Not set",
+                    "current_value": True,
+                    "default": True,
+                    "default_value": True,
+                    "name": "Action warnings",
+                    "option": "ACTION_WARNINGS",
+                    "source": "default",
+                    "via": "default",
+                },
+            ],
+        ),
     ),
     ids=[
         "output_with_galaxy_server",
         "empty_output_with_some_var_dump",
+        "colored_dump_with_banner",
+        "banner_and_blank_line_before_settings",
+        "json_mode_runner_stdout",
     ],
 )
 def test_parse_and_merge(
