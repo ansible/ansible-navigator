@@ -219,6 +219,39 @@ def test_badly_formatted_env_var(
     assert exit_msg in [exit_msg.message for exit_msg in response.exit_messages]
 
 
+@pytest.mark.parametrize(
+    ("params", "expected"),
+    (
+        pytest.param(
+            ["--senv", "ANSIBLE_SSH_ARGS=-o ControlMaster=auto -o ControlPersist=60s"],
+            {"ANSIBLE_SSH_ARGS": "-o ControlMaster=auto -o ControlPersist=60s"},
+            id="ssh-args",
+        ),
+        pytest.param(["--senv", "TOKEN=YWJjZA=="], {"TOKEN": "YWJjZA=="}, id="base64-padding"),
+        pytest.param(["--senv", "EMPTY="], {"EMPTY": ""}, id="empty-value"),
+    ),
+)
+def test_env_var_value_with_equals(
+    monkeypatch: pytest.MonkeyPatch,
+    generate_config: GenerateConfigCallable,
+    params: list[str],
+    expected: dict[str, str],
+) -> None:
+    """Ensure a ``--senv`` value may itself contain ``=``.
+
+    Args:
+        monkeypatch: Fixture for patching
+        generate_config: Fixture to generate a config
+        params: The ``--senv`` parameters
+        expected: The expected set_environment_variable value
+    """
+    monkeypatch.setattr("shutil.which", which)
+    response = generate_config(params=["run", "site.yml", "-m", "stdout", *params])
+    assert not response.exit_messages
+    entry = response.application_configuration.entry("set_environment_variable")
+    assert entry.value.current == expected
+
+
 def test_not_a_bool(
     monkeypatch: pytest.MonkeyPatch,
     generate_config: GenerateConfigCallable,
