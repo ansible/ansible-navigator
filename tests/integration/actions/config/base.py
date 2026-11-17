@@ -79,7 +79,14 @@ def _resolve_search_for(
 
 
 def _launches_config_list(step: UiTestStep) -> bool:
-    """Return whether the step opens the interactive config list."""
+    """Return whether the step opens the interactive config list.
+
+    Args:
+        step: The test step
+
+    Returns:
+        True when the step should wait for the config list view
+    """
     if step.search_within_response is not SearchFor.HELP:
         return False
     if step.user_input.startswith(":config"):
@@ -88,7 +95,14 @@ def _launches_config_list(step: UiTestStep) -> bool:
 
 
 def _shows_welcome_screen(step: UiTestStep) -> bool:
-    """Return whether the step should wait for the welcome page."""
+    """Return whether the step should wait for the welcome page.
+
+    Args:
+        step: The test step
+
+    Returns:
+        True when the step should wait for the welcome screen
+    """
     return (
         step.search_within_response is SearchFor.HELP and step.comment in _WELCOME_SCREEN_COMMENTS
     )
@@ -98,7 +112,15 @@ def _interaction_search(
     step: UiTestStep,
     cli_prompt: str,
 ) -> str | list[str]:
-    """Resolve tmux wait strings for config navigation steps."""
+    """Resolve tmux wait strings for config navigation steps.
+
+    Args:
+        step: The test step
+        cli_prompt: The CLI prompt string
+
+    Returns:
+        Strings to wait for in the tmux pane before capturing output
+    """
     search = _resolve_search_for(step, cli_prompt)
     if _shows_welcome_screen(step):
         return list(WELCOME_VIEW_SEARCH)
