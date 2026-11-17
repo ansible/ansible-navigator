@@ -508,7 +508,8 @@ class TmuxSession:
                     ignore_within_response,
                 )
                 if stable_timeout:
-                    return final_showing, False
+                    elapsed = timer() - start_time
+                    return self._handle_response_timeout(final_showing, "STABLE", elapsed), True
                 return final_showing, False
 
             elapsed = timer() - start_time
