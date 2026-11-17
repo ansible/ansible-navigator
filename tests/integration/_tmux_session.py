@@ -408,6 +408,8 @@ class TmuxSession:
         showing: list[str],
         start_time: float,
         timeout: int,
+        search_within_response: list[str] | str | None = None,
+        ignore_within_response: str | None = None,
     ) -> tuple[list[str], bool]:
         """Wait for the screen to stabilize (5 identical captures in a row).
 
@@ -415,6 +417,8 @@ class TmuxSession:
             showing: The initial screen content
             start_time: The timer start value
             timeout: Timeout in seconds
+            search_within_response: Strings that must stay present while stabilizing
+            ignore_within_response: String that invalidates the match
 
         Returns:
             A tuple of (final_showing, timed_out)
@@ -422,7 +426,14 @@ class TmuxSession:
         screens = [showing]
         while True:
             captured = self._capture_pane()
-            screens.append(captured)
+            if search_within_response and not self._check_response_match(
+                captured,
+                search_within_response,
+                ignore_within_response,
+            ):
+                screens = [captured]
+            else:
+                screens.append(captured)
             if len(screens) >= 5 and all(elem == screens[-1] for elem in screens[-5:]):
                 return screens[-1], False
             elapsed = timer() - start_time
@@ -493,6 +504,8 @@ class TmuxSession:
                     showing,
                     start_time,
                     timeout,
+                    search_within_response,
+                    ignore_within_response,
                 )
                 if stable_timeout:
                     return final_showing, False
