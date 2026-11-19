@@ -18,6 +18,11 @@ from tests.integration._tmux_session import TmuxSession
 TEST_FIXTURE_DIR = FIXTURES_DIR / "integration" / "actions" / "config"
 CONFIG_FIXTURE = TEST_FIXTURE_DIR / "ansible.cfg"
 
+# Welcome and config share a :help footer; wait for page-specific anchors too.
+WELCOME_VIEW_SEARCH = ("Explore available collections", ":help help")
+CONFIG_VIEW_SEARCH = ("Action warnings", ":help help")
+_WELCOME_SCREEN_COMMENTS = frozenset({"welcome screen", "return to welcome screen"})
+
 
 base_steps = (
     UiTestStep(user_input=":f Cache plugin timeout", comment="filter for cache plugin timeout"),
@@ -71,6 +76,57 @@ def _resolve_search_for(
         return step.search_within_response
     msg = "test mode not set"
     raise ValueError(msg)
+
+
+def _launches_config_list(step: UiTestStep) -> bool:
+    """Return whether the step opens the interactive config list.
+
+    Args:
+        step: The test step
+
+    Returns:
+        True when the step should wait for the config list view
+    """
+    if step.search_within_response is not SearchFor.HELP:
+        return False
+    if step.user_input.startswith(":config"):
+        return True
+    return "ansible-navigator" in step.user_input and " config" in step.user_input
+
+
+def _shows_welcome_screen(step: UiTestStep) -> bool:
+    """Return whether the step should wait for the welcome page.
+
+    Args:
+        step: The test step
+
+    Returns:
+        True when the step should wait for the welcome screen
+    """
+    return (
+        step.search_within_response is SearchFor.HELP and step.comment in _WELCOME_SCREEN_COMMENTS
+    )
+
+
+def _interaction_search(
+    step: UiTestStep,
+    cli_prompt: str,
+) -> str | list[str]:
+    """Resolve tmux wait strings for config navigation steps.
+
+    Args:
+        step: The test step
+        cli_prompt: The CLI prompt string
+
+    Returns:
+        Strings to wait for in the tmux pane before capturing output
+    """
+    search = _resolve_search_for(step, cli_prompt)
+    if _shows_welcome_screen(step):
+        return list(WELCOME_VIEW_SEARCH)
+    if _launches_config_list(step):
+        return list(CONFIG_VIEW_SEARCH)
+    return search
 
 
 def _mask_config_output(
@@ -178,7 +234,7 @@ class BaseClass:
             step: The commands to issue and content to look for
             skip_if_already_failed: Fixture that stops parametrized tests running on first failure.
         """
-        search_within_response = _resolve_search_for(step, tmux_session.cli_prompt)
+        search_within_response = _interaction_search(step, tmux_session.cli_prompt)
 
         received_output = tmux_session.interaction(
             value=step.user_input,
