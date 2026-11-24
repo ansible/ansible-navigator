@@ -1314,7 +1314,7 @@ class NavigatorPostProcessor:
             flattened = flatten_list(entry.value.current)
             set_envs = {}
             for env_var_pair in flattened:
-                parts = env_var_pair.split("=")
+                parts = env_var_pair.split("=", 1)
                 if len(parts) == 2:
                     set_envs[parts[0]] = parts[1]
                 else:
