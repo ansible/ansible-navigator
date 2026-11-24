@@ -155,6 +155,12 @@ jobs:
 
       - run: pip3 install 'coverage>=7.5.1'
 
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: logs-*.zip
+          path: .
+
       - name: Merge logs into a single archive
         uses: actions/upload-artifact/merge@v7
         with:
@@ -162,12 +168,6 @@ jobs:
           include-hidden-files: true
           pattern: logs-*.zip
           separate-directories: true
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v8
-        with:
-          name: logs.zip
-          path: .
 
       - name: Upload coverage data
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
